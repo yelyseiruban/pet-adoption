@@ -12,21 +12,14 @@ import resolvers from "./graphql/resolvers";
 import {ApolloServer} from "@apollo/server";
 import {startStandaloneServer} from "@apollo/server/standalone";
 import {serve, setup} from "swagger-ui-express";
-import {swaggerSpec} from "./documentation/swagger/swagger";
+import {swaggerSpec} from "../swagger";
 
 const app = express();
 const port = 3000;
 
 
-const whitelist = ['https://pet-adoption-front'];
 const corsOptions = {
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (!origin || whitelist.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    methods: ["GET", "POST", "PUT", "DELETE"]
 };
 
 

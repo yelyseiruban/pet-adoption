@@ -4,6 +4,7 @@ import {PetConverter} from "../utils/database/converters/petConverter";
 
 const router = express.Router();
 
+
 /**
  * @swagger
  * tags:
@@ -71,6 +72,50 @@ router.get('/pet/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /pets:
+ *   post:
+ *     summary: Create a new pet
+ *     description: Add a new pet to the database.
+ *     tags: [Pets]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the pet.
+ *               age:
+ *                 type: number
+ *                 description: Age of the pet.
+ *               race:
+ *                 type: string
+ *                 description: Race of the pet (optional).
+ *     responses:
+ *       201:
+ *         description: Pet created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 age:
+ *                   type: number
+ *                 race:
+ *                   type: string
+ *       400:
+ *         description: Bad Request - Missing required fields or age is not a number.
+ *       409:
+ *         description: Conflict - Pet already exists.
+ *       500:
+ *         description: Internal Server Error.
+ */
 router.post('/', async (req, res) => {
     try {
         const {name, age, race } = req.body;
@@ -105,6 +150,52 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /pets/pet/{id}:
+ *   put:
+ *     summary: Update an existing pet
+ *     description: Update the details of a pet in the database.
+ *     tags: [Pets]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the pet to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               age:
+ *                 type: number
+ *               race:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Pet updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 age:
+ *                   type: number
+ *                 race:
+ *                   type: string
+ *       404:
+ *         description: Pet not found.
+ *       400:
+ *         description: Bad Request.
+ */
 router.put('/pet/:id', async (req, res) => {
     try {
         const pet: PetDBModel | null = await Pet.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -115,6 +206,28 @@ router.put('/pet/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /pets/pet/{id}:
+ *   delete:
+ *     summary: Delete a pet
+ *     description: Remove a pet from the database.
+ *     tags: [Pets]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the pet to delete.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Pet deleted successfully.
+ *       404:
+ *         description: Pet not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
 router.delete('/pet/:id', async (req, res) => {
     try {
         const pet: PetDBModel | null = await Pet.findByIdAndDelete(req.params.id);
