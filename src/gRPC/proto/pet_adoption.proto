@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package petadoption;
+
+import "google/protobuf/empty.proto";
+
+message Pet {
+    string id = 1;
+    string name = 2;
+    string race = 3;
+    int32 age = 4;
+    bool adopted = 5;
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+    bool canAdopt = 3;
+    repeated string pets = 4;
+}
+
+message Adoption {
+    string id = 1;
+    string userId = 2;
+    string petId = 3;
+    string dateTime = 4;
+}
+
+message CreatePetResponse {
+    Pet pet = 1;
+}
+
+message CreateUserResponse {
+    User user = 1;
+}
+
+message CreateAdoptionResponse {
+    Adoption adoption = 1;
+}
+
+message PetsResponse {
+    repeated Pet pet = 1;
+}
+
+message UsersResponse {
+    repeated User user = 1;
+}
+
+message AdoptionsResponse {
+    repeated Adoption adoption = 1;
+}
+
+service PetAdoptionService {
+    rpc GetPets (google.protobuf.Empty) returns (PetsResponse);
+    rpc GetPet (PetIdRequest) returns (Pet);
+    rpc CreatePet (CreatePetRequest) returns (CreatePetResponse);
+    rpc UpdatePet (UpdatePetRequest) returns (Pet);
+    rpc DeletePet (PetIdRequest) returns (google.protobuf.Empty);
+
+    rpc GetUsers (google.protobuf.Empty) returns (UsersResponse);
+    rpc GetUser (UserIdRequest) returns (User);
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+    rpc UpdateUser (UserIdRequest) returns (User);
+    rpc DeleteUser (UserIdRequest) returns (google.protobuf.Empty);
+    rpc VerifyUser (UserIdRequest) returns (google.protobuf.Empty);
+
+    rpc GetAdoptions (google.protobuf.Empty) returns (AdoptionsResponse);
+    rpc GetAdoption (PetIdRequest) returns (Adoption);
+    rpc DeleteAdoption (PetIdRequest) returns (google.protobuf.Empty);
+    rpc CreateAdoption (CreateAdoptionRequest) returns (CreateAdoptionResponse);
+}
+
+message PetIdRequest {
+    string id = 1;
+}
+
+message UserIdRequest {
+    string id = 1;
+}
+
+
+message CreatePetRequest {
+    string name = 1;
+    string race = 2;
+    int32 age = 3;
+}
+
+message UpdatePetRequest {
+    string id = 1;
+    string name = 2;
+    string race = 3;
+    int32 age = 4;
+}
+
+message CreateUserRequest {
+    string name = 1;
+}
+
+message CreateAdoptionRequest {
+    string userId = 1;
+    string petId = 2;
+}
