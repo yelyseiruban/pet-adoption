@@ -29,9 +29,6 @@ const corsOptions = {
     },
 };
 
-app.use('/pets', petsRouter);
-app.use('/users', usersRouter);
-app.use('/adoptions', adoptionRouter);
 
 app.use('/api-docs', serve);
 app.get('/api-docs', setup(swaggerSpec));
@@ -50,6 +47,9 @@ startStandaloneServer(apolloServer, {
     console.log(`Apollo server is running at http://localhost:4000}`);
 })
 
+app.use('/pets', petsRouter);
+app.use('/users', usersRouter);
+app.use('/adoptions', adoptionRouter);
 
 connectDB();
 
